@@ -2,11 +2,10 @@ import requests
 import configparser
 
 def read_config():
-	configParser = configparser.RawConfigParser()
-	configFilePath = r'./mailgun.cfg'
-	configParser.read(configFilePath)
-	required_vars = dict(configParser.items("Required"))
-	return {"API_KEY": required_vars["API_KEY"], "DOMAIN_NAME": required_vars["DOMAIN_NAME"]}
+	config = configparser.RawConfigParser()
+	config.read("./mailgun.cfg")
+	required_vars = dict(config.items("Required"))
+	return {"API_KEY": required_vars["api_key"], "DOMAIN_NAME": required_vars["domain_name"]}
 	
 
 def send_simple_message():
@@ -19,6 +18,6 @@ def send_simple_message():
 			"text": "Test!"})
 
 def main():
-	print(str(read_config()["DOMAIN_NAME"]))
+	send_simple_message()
 	
 main()
