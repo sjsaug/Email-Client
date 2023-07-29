@@ -16,9 +16,17 @@ def read_config():
 		"TEXT": email_parameters["text"], 
 		"ATTACHMENT": email_parameters["attachment"]
 		}
-	
 
 def send_simple_message():
+	return requests.post(
+	    "https://api.mailgun.net/v3/" + read_config()["DOMAIN_NAME"] + "/messages",
+		auth=("api", read_config()["API_KEY"]),
+		data={"from": read_config()["SENDER"] + "<" + read_config()["DOMAIN_PREFIX"] + "@" + read_config()["DOMAIN_NAME"] + ">",
+			"to": read_config()["RECIPIENT"],
+			"subject": read_config()["SUBJECT"],
+			"text": read_config()["TEXT"]})
+
+def send_attachment_message():
 	return requests.post(
 	    "https://api.mailgun.net/v3/" + read_config()["DOMAIN_NAME"] + "/messages",
 		auth=("api", read_config()["API_KEY"]),
@@ -29,6 +37,9 @@ def send_simple_message():
 			"text": read_config()["TEXT"]})
 
 def main():
-	send_simple_message()
+	if read_config()["ATTACHMENT"] != "NONE":
+		send_attachment_message()
+	else:
+		send_simple_message()
 	
 main()
