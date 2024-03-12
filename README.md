@@ -1,7 +1,7 @@
-# mailgun-test
+# mailgun-api-sender
 
 ### About
-Example use of the Mailgun API in Python.
+A program that can be used to send emails using the Mailgun service.
 
 ### Usage
 1. Generate a Mailgun API key and copy it
