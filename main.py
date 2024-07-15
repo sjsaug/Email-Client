@@ -13,7 +13,8 @@ def read_config():
 		"DOMAIN_PREFIX": email_parameters["domain_prefix"], 
 		"RECIPIENT": email_parameters["recipient"], 
 		"SUBJECT": email_parameters["subject"], 
-		"TEXT": email_parameters["text"], 
+		"TEXT": email_parameters["text"],
+		"TEMPLATE": email_parameters["template"], 
 		"ATTACHMENT": email_parameters["attachment"]
 		}
 
@@ -36,9 +37,21 @@ def send_attachment_message():
 			"subject": read_config()["SUBJECT"],
 			"text": read_config()["TEXT"]})
 
+def send_template_message():
+	return requests.post(
+	    "https://api.mailgun.net/v3/" + read_config()["DOMAIN_NAME"] + "/messages",
+		auth=("api", read_config()["API_KEY"]),
+		data={"from": read_config()["SENDER"] + "<" + read_config()["DOMAIN_PREFIX"] + "@" + read_config()["DOMAIN_NAME"] + ">",
+			"to": read_config()["RECIPIENT"],
+			"subject": read_config()["SUBJECT"],
+			"template": read_config()["TEXT"],
+			"h:X-Mailgun-Variables": '{"test": "test"}'}) # not sure what this is for, but it's in the documentation
+
 def main():
 	if read_config()["ATTACHMENT"] != "NONE":
 		send_attachment_message()
+	elif read_config()["TEMPLATE"] != "NONE":
+		send_template_message()
 	else:
 		send_simple_message()
 	
